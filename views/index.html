@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Recettes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css"> <!-- Ajoutez cette ligne -->
+</head>
+<body>
+
+<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#formModal">Ajouter une Recette</button>
+<br>
+
+<div class="container">
+    <div class="well">
+        <h1>Liste des Recettes</h1>
+        
+        <!-- Boucle pour afficher les recettes -->
+        {% for recipe in recipes %}
+            <div class="well">
+                <h4>
+                    {{ recipe.title }}
+                    <button class="btn btn-default pull-right" data-toggle="collapse" data-target="#recipe_{{ recipe.id }}" aria-expanded="false" aria-controls="recipe_{{ recipe.id }}">
+                        <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                    </button>
+                </h4>
+                <div class="collapse" id="recipe_{{ recipe.id }}">
+                    <p>
+                        <strong>Description : </strong> {{ recipe.description }}
+                    </p>
+                    <form method="post" action="/updateRecipe" class="form-inline">
+                        <input type="hidden" name="id" value="{{ recipe.id }}">
+                        <div class="form-group">
+                            <input type="text" name="title" value="{{ recipe.title }}" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="description" class="form-control" required>{{ recipe.description }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                    </form>
+                    <form method="post" action="/deleteRecipe" class="form-inline">
+                        <input type="hidden" name="id" value="{{ recipe.id }}">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        
+    </div>
+</div>
+
+<!-- Add Form Modal -->
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="/addRecipe">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="formModalLabel">Ajouter une Recette</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Titre de la Recette</label>
+                        <input type="text" class="form-control" name="title" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" name="description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
